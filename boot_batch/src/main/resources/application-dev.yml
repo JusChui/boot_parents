@@ -1,0 +1,37 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /batch
+
+spring:
+  batch:
+    job:
+      enabled: false
+    initialize-schema: always
+  #动态数据源配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: OasisHikariCP
+      connection-test-query: SELECT 1
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url:
+          username: root
+          password:
+        slaver:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url:
+          username: root
+          password:
+
+mybatis-plus:
+  mapper-locations: classpath*:com/boot/**/mapper/*.xml
