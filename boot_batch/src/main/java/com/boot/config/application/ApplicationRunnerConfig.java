@@ -22,8 +22,14 @@ public class ApplicationRunnerConfig implements ApplicationRunner {
     @Autowired
     private Scheduler scheduler;
 
+    /**
+     * 测试任务
+     *
+     * @param args
+     */
     @Override
     public void run(ApplicationArguments args) {
+        log.info("execute code after launch:");
         try {
             JobDetail detail =
                     JobBuilder.newJob(TestJob.class)
