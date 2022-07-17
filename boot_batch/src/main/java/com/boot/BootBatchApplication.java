@@ -1,6 +1,6 @@
 package com.boot;
 
-import org.mybatis.spring.annotation.MapperScan;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,8 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @CreateTime: 2022-07-10 11:50:48
  * @Description:
  */
-@SpringBootApplication
-@MapperScan({"com.boot.**.mapper", "com.boot.**.dao"})
+@SpringBootApplication(exclude = {DruidDataSourceAutoConfigure.class})
 public class BootBatchApplication {
 
     public static void main(String[] args) {
