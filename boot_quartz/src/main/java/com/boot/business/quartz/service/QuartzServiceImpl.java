@@ -1,6 +1,7 @@
-package com.boot.business.quartz.mapper;
+package com.boot.business.quartz.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.boot.business.quartz.mapper.QuartzMapper;
 import com.boot.business.quartz.service.QuartzService;
 import com.boot.business.quartz.vo.QuartzVo;
 import org.springframework.beans.factory.annotation.Autowired;
