@@ -1,0 +1,29 @@
+server:
+  port: 8087
+  servlet:
+    context-path: /api
+
+spring:
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/view/
+
+  datasource:
+    # 主数据库
+    master:
+      # 注意，整合多数据源时如果使用springboot默认的数据库连接池Hikari，指定连接数据使用的是jdbc-url而不是url属性
+      jdbcUrl: jdbc:mysql://:3306/xh?useUnicode=true&characterEncoding=utf8&useSSL=true
+      username: 
+      password:
+      driverClassName: com.mysql.cj.jdbc.Driver
+#      mapper-location: classpath:com/boot/business/**/*.xml
+    # 副数据库
+    slaver:
+      # 注意，整合多数据源时如果使用springboot默认的数据库连接池Hikari，指定连接数据使用的是jdbc-url而不是url属性
+      jdbcUrl: jdbc:postgresql://:5432/ods?stringtype=unspecified
+      username:
+      password:
+      driverClassName: org.postgresql.Driver
+#      mapper-location: classpath:com/boot/salver/**/*.xml
+

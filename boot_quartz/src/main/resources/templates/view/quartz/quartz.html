@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:replace="common/head::static"></script>
+</head>
+<body>
+<div class="layui-container" style="margin-top: 8%;">
+    <div class="layui-row">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">任务名称</label>
+                <div class="layui-input-inline" style="width: 22%;height: 37.3px;">
+                    <input type="text" name="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="layui-row">
+        <table id="quartzTable" lay-filter="quartz"></table>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['table'], function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#quartzTable'
+            // , height: 312
+            , method: 'post'
+            , url: ctx + '/quartz/quartzList' //数据接口
+            , page: true //开启分页
+            , parseData: function (res) { //res 即为原始返回的数据
+                var data = res.data;
+                return {
+                    // "flag": res.flag, //解析接口状态
+                    "status": res.status, //解析提示文本
+                    "msg": res.message, //解析提示文本
+                    "records": data.total, //解析数据长度
+                    "rows": data.records //解析数据列表
+                };
+            }
+            , response: {
+                statusName: 'status' //规定数据状态的字段名称，默认：code
+                , statusCode: 200 //规定成功的状态码，默认：0
+                , msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                , countName: 'total' //规定数据总数的字段名称，默认：count
+                , dataName: 'rows' //规定数据列表的字段名称，默认：data
+            }
+            , cols: [
+                [ //表头
+                    {field: 'quartzJobId', title: 'ID', hide: true}
+                    , {field: 'quartzJobName', title: '任务名称'}
+                    , {field: 'quartzJobClass', title: '任务类全名', sort: true}
+                    , {field: 'quartzJobGroup', title: '任务组'}
+                    , {field: 'quartzJobCron', title: 'CRON表达式'}
+                    , {field: 'quartzJobStatus', title: '任务状态', sort: true}
+                    , {field: 'quartzJobParams', title: '任务参数', sort: true}
+                    , {field: 'quartzJobDescription', title: '任务描述'}
+                ]
+            ]
+        });
+    })
+</script>
+</body>
+</html>
