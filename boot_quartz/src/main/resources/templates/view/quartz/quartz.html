@@ -8,30 +8,48 @@
 <body>
 <div class="layui-container" style="margin-top: 8%;">
     <div class="layui-row">
-        <form class="layui-form layui-form-pane" action="">
+        <!--<form class="layui-form layui-form-pane" action="#">
             <div class="layui-form-item" pane>
                 <label class="layui-form-label">任务名称</label>
                 <div class="layui-input-inline" style="width: 22%;height: 37.3px;">
-                    <input type="text" name="" autocomplete="off" class="layui-input">
+                    <input type="text" name="quartzJobName" autocomplete="off" class="layui-input">
                 </div>
+
+                <button lay-submit lay-filter="doSearchBtn" class="layui-btn" style="float: right;">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
             </div>
-        </form>
+        </form>-->
+        <div class="demoTable">
+            任务名称：
+            <div class="layui-inline">
+                <input class="layui-input" name="quartzJobName" id="demoReload" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
     </div>
     <div class="layui-row">
         <table id="quartzTable" lay-filter="quartz"></table>
     </div>
 </div>
 <script type="text/javascript">
-    layui.use(['table'], function () {
-        var table = layui.table;
+    let tableIns;
+    layui.use(['table', 'form', 'jquery'], function () {
+        var table = layui.table
+            , form = layui.form;
 
-        //第一个实例
-        table.render({
+        //加载任务列表
+        tableIns = table.render({
             elem: '#quartzTable'
+            , id: 'quartzTableId'
             // , height: 312
-            , method: 'post'
+            // , method: 'post'
+            // , contentType: 'application/json'
             , url: ctx + '/quartz/quartzList' //数据接口
             , page: true //开启分页
+            , limits: [10, 20, 30, 40, 50, 60, 70, 80, 90]
+            , loading: true
+            // , where: {}
             , parseData: function (res) { //res 即为原始返回的数据
                 var data = res.data;
                 return {
@@ -59,10 +77,48 @@
                     , {field: 'quartzJobStatus', title: '任务状态', sort: true}
                     , {field: 'quartzJobParams', title: '任务参数', sort: true}
                     , {field: 'quartzJobDescription', title: '任务描述'}
+                    , {
+                    field: 'opt', title: '操作', templet: function (dRow) {
+                        console.log(dRow)
+
+                        //得到当前行数据，并拼接成自定义模板
+                        return '<a></a>'
+                    }
+                }
                 ]
             ]
         });
-    })
+
+        var $ = layui.$, active = {
+            reload: function () {
+                var demoReload = $('#demoReload');
+
+                //执行重载
+                table.reload('quartzTableId', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        quartzJobName: demoReload.val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        /*//监听提交
+        form.on('submit(doSearchBtn)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            tableIns.reload('quartzTable', {
+                where: JSON.stringify(data.field)
+            });
+            return false;
+        });*/
+    });
 </script>
 </body>
 </html>

@@ -16,7 +16,7 @@
         FROM batch.t_quartz_job job
         WHERE job.DELETE_FLAG = '00'
         <if test="vo.quartzJobName != null and vo.quartzJobName!=''">
-            job.JOB_NAME LIKE CONCAT('%', #{vo.quartzJobName}, '%')
+            and job.JOB_NAME LIKE concat('%', #{vo.quartzJobName}, '%')
         </if>
     </select>
 </mapper>
