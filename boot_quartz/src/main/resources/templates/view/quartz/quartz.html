@@ -8,7 +8,14 @@
 <body>
 <div class="layui-container" style="margin-top: 8%;">
     <div class="layui-row">
-
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">任务名称</label>
+                <div class="layui-input-inline" style="width: 22%;height: 37.3px;">
+                    <input type="text" name="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </form>
     </div>
     <div class="layui-row">
         <table id="quartzTable" lay-filter="quartz"></table>
@@ -21,7 +28,7 @@
         //第一个实例
         table.render({
             elem: '#quartzTable'
-            , height: 312
+            // , height: 312
             , method: 'post'
             , url: ctx + '/quartz/quartzList' //数据接口
             , page: true //开启分页
