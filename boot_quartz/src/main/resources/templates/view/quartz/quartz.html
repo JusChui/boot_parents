@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:replace="common/head::static"></script>
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row">
+
+    </div>
+    <div class="layui-row">
+        <table id="quartzTable" lay-filter="quartz"></table>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['table'], function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#quartzTable'
+            , height: 312
+            , method: 'post'
+            , url: ctx + '/quartz/quartzList' //数据接口
+            , page: true //开启分页
+            , parseData: {
+                "code": 0,
+                "msg": "",
+                "count": 1000,
+                "data": [{}, {}]
+            }
+            , response: {
+                statusName: 'status' //规定数据状态的字段名称，默认：code
+                , statusCode: 200 //规定成功的状态码，默认：0
+                , msgName: 'hint' //规定状态信息的字段名称，默认：msg
+                , countName: 'total' //规定数据总数的字段名称，默认：count
+                , dataName: 'rows' //规定数据列表的字段名称，默认：data
+            }
+            , cols: [
+                [ //表头
+                    {field: 'quartzJobId', title: 'ID', width: 80, hide: true}
+                    , {field: 'quartzJobName', title: '任务名称', width: 80}
+                    , {field: 'quartzJobClass', title: '任务类全名', width: 80, sort: true}
+                    , {field: 'quartzJobGroup', title: '任务组', width: 80}
+                    , {field: 'quartzJobCron', title: 'CRON表达式', width: 177}
+                    , {field: 'quartzJobStatus', title: '任务状态', width: 80, sort: true}
+                    , {field: 'quartzJobParams', title: '任务参数', width: 80, sort: true}
+                    , {field: 'quartzJobDescription', title: '任务描述', width: 80}
+                ]
+            ]
+        });
+    })
+</script>
+</body>
+</html>
