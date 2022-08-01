@@ -6,7 +6,7 @@
     <script th:replace="common/head::static"></script>
 </head>
 <body>
-<div class="layui-container">
+<div class="layui-container" style="margin-top: 8%;">
     <div class="layui-row">
 
     </div>
@@ -25,29 +25,33 @@
             , method: 'post'
             , url: ctx + '/quartz/quartzList' //数据接口
             , page: true //开启分页
-            , parseData: {
-                "code": 0,
-                "msg": "",
-                "count": 1000,
-                "data": [{}, {}]
+            , parseData: function (res) { //res 即为原始返回的数据
+                var data = res.data;
+                return {
+                    // "flag": res.flag, //解析接口状态
+                    "status": res.status, //解析提示文本
+                    "msg": res.message, //解析提示文本
+                    "records": data.total, //解析数据长度
+                    "rows": data.records //解析数据列表
+                };
             }
             , response: {
                 statusName: 'status' //规定数据状态的字段名称，默认：code
                 , statusCode: 200 //规定成功的状态码，默认：0
-                , msgName: 'hint' //规定状态信息的字段名称，默认：msg
+                , msgName: 'msg' //规定状态信息的字段名称，默认：msg
                 , countName: 'total' //规定数据总数的字段名称，默认：count
                 , dataName: 'rows' //规定数据列表的字段名称，默认：data
             }
             , cols: [
                 [ //表头
-                    {field: 'quartzJobId', title: 'ID', width: 80, hide: true}
-                    , {field: 'quartzJobName', title: '任务名称', width: 80}
-                    , {field: 'quartzJobClass', title: '任务类全名', width: 80, sort: true}
-                    , {field: 'quartzJobGroup', title: '任务组', width: 80}
-                    , {field: 'quartzJobCron', title: 'CRON表达式', width: 177}
-                    , {field: 'quartzJobStatus', title: '任务状态', width: 80, sort: true}
-                    , {field: 'quartzJobParams', title: '任务参数', width: 80, sort: true}
-                    , {field: 'quartzJobDescription', title: '任务描述', width: 80}
+                    {field: 'quartzJobId', title: 'ID', hide: true}
+                    , {field: 'quartzJobName', title: '任务名称'}
+                    , {field: 'quartzJobClass', title: '任务类全名', sort: true}
+                    , {field: 'quartzJobGroup', title: '任务组'}
+                    , {field: 'quartzJobCron', title: 'CRON表达式'}
+                    , {field: 'quartzJobStatus', title: '任务状态', sort: true}
+                    , {field: 'quartzJobParams', title: '任务参数', sort: true}
+                    , {field: 'quartzJobDescription', title: '任务描述'}
                 ]
             ]
         });

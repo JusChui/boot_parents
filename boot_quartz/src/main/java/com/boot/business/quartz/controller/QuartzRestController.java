@@ -3,6 +3,7 @@ package com.boot.business.quartz.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.boot.business.quartz.service.QuartzService;
 import com.boot.business.quartz.vo.QuartzVo;
+import com.boot.util.JSONResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,10 +22,11 @@ public class QuartzRestController {
     private QuartzService quartzService;
 
     @PostMapping("quartzList")
-    public Page<QuartzVo> getQuartzJobList(QuartzVo quartzVo,
-                                           @RequestParam("page") int page,
-                                           @RequestParam("limit") int limit) {
-        return quartzService.getQuartzList(quartzVo, page, limit);
+    public JSONResponse getQuartzJobList(QuartzVo quartzVo,
+                                         @RequestParam("page") int page,
+                                         @RequestParam("limit") int limit) {
+        return new JSONResponse(200, "SUCCESS",
+                quartzService.getQuartzList(quartzVo, page, limit));
 
     }
 
