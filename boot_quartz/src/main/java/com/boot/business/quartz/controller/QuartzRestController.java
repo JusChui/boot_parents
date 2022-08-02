@@ -72,15 +72,6 @@ public class QuartzRestController {
 
     }
 
-    /**
-     * 任务管理页面
-     *
-     * @return
-     */
-    @GetMapping("quartz.html")
-    public ModelAndView quartzHtml() {
-        return new ModelAndView("quartz/quartz.html");
-    }
 
     @RequestMapping("startJobs")
     public JSONResponse startJobs(@RequestBody String json) throws SchedulerException, ClassNotFoundException {
@@ -115,4 +106,26 @@ public class QuartzRestController {
         }
         return new JSONResponse(200, "SUCCESS", null);
     }
+
+    /**
+     * 任务管理页面
+     *
+     * @return
+     */
+    @GetMapping("quartz.html")
+    public ModelAndView quartzHtml() {
+        return new ModelAndView("quartz/quartz.html");
+    }
+
+
+    /**
+     * 任务管理页面
+     *
+     * @return
+     */
+    @GetMapping("addQuartzJob.html")
+    public ModelAndView addQuartzJobHtml() {
+        return new ModelAndView("quartz/addJob.html");
+    }
+
 }
