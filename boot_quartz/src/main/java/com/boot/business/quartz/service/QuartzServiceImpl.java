@@ -127,6 +127,7 @@ public class QuartzServiceImpl implements QuartzService {
     public void startOnce(QuartzVo quartzJob) throws
             ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, SchedulerException {
 
+        //todo 执行一次
         JobKey jobKey = new JobKey(quartzJob.getQuartzJobId(), quartzJob.getQuartzJobGroup());
         JobDetail detail = scheduler.getJobDetail(jobKey);
 
