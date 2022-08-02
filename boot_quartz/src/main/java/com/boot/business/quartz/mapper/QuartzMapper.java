@@ -14,5 +14,13 @@ import java.util.List;
  */
 public interface QuartzMapper {
 
+    List<QuartzVo> getQuartzJobs(@Param("vo") QuartzVo quartzVo);
+
     List<QuartzVo> getQuartzList(@Param("vo") QuartzVo quartzVo, @Param("page") Page<QuartzVo> voPage);
+
+    void insertOrUpdateJob(@Param("vo") QuartzVo quartzVo);
+
+    QuartzVo getQuartzById(@Param("jobId") String quartzJobId);
+
+    void updateQuartzJobById(@Param("vo") QuartzVo quartz);
 }

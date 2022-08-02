@@ -32,4 +32,10 @@ public class QuartzVo implements Serializable {
 
     private String deleteFlag;
 
+    /**
+     * 是否立即启动
+     * 1，是
+     */
+    private String startAtNow;
+
 }
