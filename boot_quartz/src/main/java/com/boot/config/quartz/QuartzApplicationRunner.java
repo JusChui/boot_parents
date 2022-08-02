@@ -35,7 +35,7 @@ public class QuartzApplicationRunner implements ApplicationRunner {
         if (CollectionUtils.isNotEmpty(quartzList)) {
             quartzList.forEach(quartzVo -> {
                 try {
-                    quartzService.startJob(quartzVo);
+                    quartzService.switchJobStatus(quartzVo);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (SchedulerException e) {

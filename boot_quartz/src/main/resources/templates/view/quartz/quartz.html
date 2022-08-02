@@ -259,12 +259,9 @@
                 method: 'post',
                 success: function (res) {
                     if (res.status == 200) {
-                        layer.msg("停止成功！", {
+                        layer.msg("操作成功！", {
                             icon: 1,
                             time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                        }, function () {
-                            // $('.demoTable .layui-btn').click();
-                            tableIns.reload();
                         });
 
                     } else {

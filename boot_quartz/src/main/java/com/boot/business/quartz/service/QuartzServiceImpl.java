@@ -11,12 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.JobExecutionContextImpl;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -91,11 +93,11 @@ public class QuartzServiceImpl implements QuartzService {
         CronTrigger trigger = TriggerBuilder
                 .newTrigger()
                 .withSchedule(CronScheduleBuilder.cronSchedule(quartzVo.getQuartzJobCron()))
-                .startNow()
+                //.startNow()
                 .build();
 
-        scheduler.start();
-        scheduler.scheduleJob(detail, trigger);
+        scheduler.start();  //开启调度器
+        scheduler.scheduleJob(detail, trigger); //执行任务
     }
 
     @Override
@@ -129,15 +131,48 @@ public class QuartzServiceImpl implements QuartzService {
 
         //todo 执行一次
         JobKey jobKey = new JobKey(quartzJob.getQuartzJobId(), quartzJob.getQuartzJobGroup());
-        JobDetail detail = scheduler.getJobDetail(jobKey);
 
-        if (detail == null) {
-            this.startJob(quartzJob);
+        if (scheduler.getJobDetail(jobKey) == null) {
+            //如果调度器中没有，添加进去
+            //this.startJob(quartzJob);
+            log.info("立即执行一次--{}", quartzJob);
+            Class<?> aClass = null;
+            if (StringUtils.contains(quartzJob.getQuartzJobClass(), ".")) {
+                aClass = Class.forName(quartzJob.getQuartzJobClass());
+            } else {
+                aClass = applicationContextHolder.getBean(quartzJob.getQuartzJobClass()).getClass();
+            }
+            if (null == aClass) {
+                log.info("{} 未找到对应任务类", quartzJob);
+                return;
+            }
+
+            JobDataMap dataMap = null;
+            if (StringUtils.isNotBlank(quartzJob.getQuartzJobParams())) {
+                dataMap = new JobDataMap(JSONUtil.toBean(quartzJob.getQuartzJobParams(), Map.class));
+            }
+
+            JobBuilder jobBuilder = JobBuilder.newJob((Class<? extends Job>) aClass).withIdentity(jobKey);
+
+            if (null != dataMap) {
+                //如果此参数不为空，则设置执行参数
+                jobBuilder.setJobData(dataMap);
+            }
+
+            JobDetail detail = jobBuilder.build();
+            //Trigger trigger = new SimpleTriggerImpl();
+            SimpleTriggerImpl trigger = new SimpleTriggerImpl();
+            trigger.setName("SimpleTrigger+planName+planId");
+            trigger.setStartTime(new Date());// 开始运行时间
+            trigger.setRepeatInterval(1);
+            trigger.setRepeatCount(0); // 重复次数，设为0表示不重复
+            //trigger.setEndTime(new Date(new Date().getTime() + 3600));
+            //scheduler.start();  //开启调度器
+            scheduler.scheduleJob(detail, trigger);
+            //scheduler.triggerJob(jobKey);
         } else {
             scheduler.triggerJob(jobKey);
         }
-
-
     }
 
 
